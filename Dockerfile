@@ -20,7 +20,7 @@ RUN		apt-get update \
 		&& rm -rf /var/lib/apt/lists/*
 
 # Allow connection from all interfaces
-RUN		sed -i -e "s/^bind-address/#bind-address" /etc/mysql/my.cnf
+RUN		sed -i -e "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 
 # NOTE: the effect of the line above should be equivalent to that of the line below
 #RUN	sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
