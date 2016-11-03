@@ -26,11 +26,11 @@ RUN		apt-get update \
 #		&& sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
 
 # Create initial password for "root"
-		&& service mysql start && mysqladmin -u root password root \
+		&& service mysql start && mysqladmin -u root password root
 
 # Disable autostart
-		&& update-rc.d -f mysql remove \
-		&& chmod 777 /var/lib/mysql
+#		&& update-rc.d -f mysql remove \
+#		&& chmod 777 /var/lib/mysql
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
-ENTRYPOINT		["/usr/bin/mysqld_safe"]
+#ENTRYPOINT		["/usr/bin/mysqld_safe"]
