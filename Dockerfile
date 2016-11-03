@@ -3,7 +3,7 @@ MAINTAINER	technopreneural@yahoo.com
 
 # Create volume for data
 # NOTE: use "docker run -v <folder_path>:<volume>..." to bind volume to host folder
-VOLUME		["/var/mysql/data"]
+VOLUME		["/var/lib/mysql/"]
 
 # Expose port 3306 (MySQL) to other containers
 # NOTE: use "docker run -p 3306:3306..." to map port to host
