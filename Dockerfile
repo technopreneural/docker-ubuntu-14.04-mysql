@@ -29,7 +29,8 @@ RUN		apt-get update \
 		&& service mysql start && mysqladmin -u root password root \
 
 # Disable autostart
-		&& update-rc.d -f mysql remove
+		&& update-rc.d -f mysql remove \
+		&& chmod 777 /var/lib/mysql
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
 ENTRYPOINT		["/usr/bin/mysqld_safe"]
