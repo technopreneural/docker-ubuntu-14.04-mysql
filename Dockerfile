@@ -3,7 +3,7 @@ MAINTAINER	technopreneural@yahoo.com
 
 # Create volume for data
 # NOTE: use "docker run -v <folder_path>:<volume>..." to bind volume to host folder
-VOLUME		["/var/lib/mysql/"]
+VOLUME		["/var/lib/mysql/", "/var/log/mysql/"]
 
 # Expose port 3306 (MySQL) to other containers
 # NOTE: use "docker run -p 3306:3306..." to map port to host
@@ -26,7 +26,10 @@ RUN		apt-get update \
 #		&& sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
 
 # Create initial password for "root"
-		&& service mysql start && mysqladmin -u root password root
+		&& service mysql start && mysqladmin -u root password root \
+
+# Disable autostart
+		&& update-rc.d -f mysql remove
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
 ENTRYPOINT		["/usr/bin/mysqld_safe"]
