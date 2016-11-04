@@ -14,8 +14,8 @@ EXPOSE  	3306
 
 # Pre-seed password into MySQL configuration
 RUN		MYSQL_PASSWORD="root" \
-		&& echo "mysql-server-5.5 mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf_set_selections \
-		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf_set_selections \
+		&& echo "mysql-server-5.5 mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf-set-selections \
+		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf-set-selections \
 
 # Install package(s) and delete downloaded data afterwards to reduce image footprint
 		&& apt-get update \
