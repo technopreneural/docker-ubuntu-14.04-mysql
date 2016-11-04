@@ -39,4 +39,4 @@ RUN		sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 		&& update-rc.d -f mysql remove
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
-ENTRYPOINT	["/usr/bin/mysqld_safe"]
+#ENTRYPOINT	["/usr/bin/mysqld_safe"]
