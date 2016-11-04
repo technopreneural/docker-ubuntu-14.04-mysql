@@ -21,7 +21,7 @@ RUN		export MYSQL_PASSWORD="root" \
 		&& apt-get update \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 			debconf-utils \
-			mysql-server \
+			mysql-server
 
 # Delete downloaded data afterwards to reduce image footprint
 RUN		&& rm -rf /var/lib/apt/lists/* \
