@@ -26,12 +26,12 @@ RUN		MYSQL_PASSWORD="root" \
 
 # Allow connection from all interfaces
 # NOTE: the effect of the line above should be equivalent to that of the line below
-#		sed -ie "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-RUN		sed -ie "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
+#		sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN		sed -i -e "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 
 # Remove warnings
-		&& sed -ie '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
-		&& sed -ie '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
+		&& sed -i -e '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
+		&& sed -i -e '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
 
 # Disable autostart
 #		&& service mysql stop \
