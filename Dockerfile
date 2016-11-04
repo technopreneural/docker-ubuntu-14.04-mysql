@@ -22,6 +22,9 @@ RUN		export MYSQL_PASSWORD="root" \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 			debconf-utils \
 			mysql-server \
+		&& mysql_install_db --user=mysql --datadir=/var/lib/mysql \
+		&& apt-get purge -y debconf-utils \
+		&& apt-get autoremove --purge \
 
 # Delete downloaded data afterwards to reduce image footprint
 		&& rm -rf /var/lib/apt/lists/*
@@ -39,4 +42,4 @@ RUN		sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 		&& update-rc.d -f mysql remove
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
-#ENTRYPOINT	["/usr/bin/mysqld_safe"]
+ENTRYPOINT	["/usr/bin/mysqld_safe"]
