@@ -18,10 +18,10 @@ RUN		export MYSQL_PASSWORD="root" \
 		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf-set-selections \
 
 # Install package(s) and delete downloaded data afterwards to reduce image footprint
-#		&& apt-get update \
-#		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
-#			debconf-utils \
-#			mysql-server \
+		&& apt-get update \
+		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
+			debconf-utils \
+			mysql-server \
 #		&& rm -rf /var/lib/apt/lists/* \
 
 # Allow connection from all interfaces
