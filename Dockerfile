@@ -17,20 +17,20 @@ RUN		apt-get update \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 			debconf-utils \
 			mysql-server \
-		&& rm -rf /var/lib/apt/lists/* \
+		&& rm -rf /var/lib/apt/lists/*
 
 # Allow connection from all interfaces
-		&& sed -i -e "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
+RUN		sed -i -e "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 
 # NOTE: the effect of the line above should be equivalent to that of the line below
-#		&& sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
+#		sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 
 # Create initial password for "root"
-		&& service mysql start && mysqladmin -u root password root \
+#RUN		service mysql start && mysqladmin -u root password root \
 
 # Disable autostart
-		&& service mysql stop \
-		&& update-rc.d -f mysql remove
+#		&& service mysql stop \
+#		&& update-rc.d -f mysql remove
 #		&& chmod 777 /var/lib/mysql
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
