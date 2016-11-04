@@ -34,4 +34,4 @@ RUN		apt-get update \
 #		&& chmod 777 /var/lib/mysql
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
-ENTRYPOINT		["/usr/bin/mysqld_safe"]
+#ENTRYPOINT		["/usr/bin/mysqld_safe"]
