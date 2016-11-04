@@ -12,26 +12,30 @@ EXPOSE  	3306
 # Enable (or disable) apt-cache proxy
 #ENV		http_proxy http://acng.robin.dev:3142
 
+# Pre-seed password into MySQL configuration
+RUN		MYSQL_PASSWORD="root" \
+		&& echo "mysql-server-5.5 mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf_set_selections \
+		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf_set_selections \
+
 # Install package(s) and delete downloaded data afterwards to reduce image footprint
-RUN		apt-get update \
+		&& apt-get update \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 			debconf-utils \
 			mysql-server \
-		&& rm -rf /var/lib/apt/lists/*
+		&& rm -rf /var/lib/apt/lists/* \
 
 # Allow connection from all interfaces
-RUN		sed -i -e "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
-
 # NOTE: the effect of the line above should be equivalent to that of the line below
-#		sed -i -e "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+#		sed -ie "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN		sed -ie "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 
-# Create initial password for "root"
-#RUN		service mysql start && mysqladmin -u root password root \
+# Remove warnings
+		&& sed -ie '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
+		&& sed -ie '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
 
 # Disable autostart
 #		&& service mysql stop \
-#		&& update-rc.d -f mysql remove
-#		&& chmod 777 /var/lib/mysql
+		&& update-rc.d -f mysql remove
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
 #ENTRYPOINT		["/usr/bin/mysqld_safe"]
