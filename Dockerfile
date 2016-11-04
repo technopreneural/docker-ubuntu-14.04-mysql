@@ -24,7 +24,7 @@ RUN		export MYSQL_PASSWORD="root" \
 			mysql-server
 
 # Delete downloaded data afterwards to reduce image footprint
-RUN		&& rm -rf /var/lib/apt/lists/* \
+RUN		rm -rf /var/lib/apt/lists/* \
 
 # Allow connection from all interfaces
 # NOTE: the effect of the line above should be equivalent to that of the line below
@@ -32,12 +32,11 @@ RUN		&& rm -rf /var/lib/apt/lists/* \
 		&& sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 
 # Remove warnings
-#		&& sed -i '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
-#		&& sed -i '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
+		&& sed -i '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
+		&& sed -i '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
 
-# Disable autostart
-#		&& service mysql stop \
-#		&& update-rc.d -f mysql remove
+# Disable autostart (just to make sure)
+		&& update-rc.d -f mysql remove
 
 # Run mysql in the foreground when a container is started without a command parameter to execute
-#ENTRYPOINT		["/usr/bin/mysqld_safe"]
+ENTRYPOINT		["/usr/bin/mysqld_safe"]
