@@ -24,7 +24,7 @@ RUN		export MYSQL_PASSWORD="root" \
 			mysql-server \
 
 # Delete downloaded data afterwards to reduce image footprint
-		&& rm -rf /var/lib/apt/lists/* \
+		&& rm -rf /var/lib/apt/lists/*
 
 # Allow connection from all interfaces
 # NOTE: the effect of the line above should be equivalent to that of the line below
