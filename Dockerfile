@@ -17,17 +17,19 @@ RUN		export MYSQL_PASSWORD="root" \
 		&& echo "mysql-server-5.5 mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf-set-selections \
 		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf-set-selections \
 
-# Install package(s) and delete downloaded data afterwards to reduce image footprint
+# Install package(s) 
 		&& apt-get update \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 			debconf-utils \
 			mysql-server \
-#		&& rm -rf /var/lib/apt/lists/* \
+
+# Delete downloaded data afterwards to reduce image footprint
+RUN		&& rm -rf /var/lib/apt/lists/* \
 
 # Allow connection from all interfaces
 # NOTE: the effect of the line above should be equivalent to that of the line below
 #		sed -i "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-#RUN		sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
+		&& sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
 
 # Remove warnings
 #		&& sed -i '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
