@@ -10,36 +10,33 @@ VOLUME		["/var/lib/mysql/", "/var/log/mysql/"]
 EXPOSE  	3306
 
 # Enable (or disable) apt-cache proxy
-#ENV		http_proxy http://acng.robin.dev:3142
-
-# Pre-seed password into MySQL configuration
-RUN		export MYSQL_PASSWORD="root" \
-		&& echo "mysql-server-5.5 mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf-set-selections \
-		&& echo "mysql-server-5.5 mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf-set-selections \
+#ENV		http_proxy http://192.168.69.240:3142
 
 # Install package(s) 
-		&& apt-get update \
+RUN		apt-get update \
 		&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
-			debconf-utils \
 			mysql-server \
-		&& mysql_install_db --user=mysql --datadir=/var/lib/mysql \
-		&& apt-get purge -y debconf-utils \
-		&& apt-get autoremove --purge \
 
 # Delete downloaded data afterwards to reduce image footprint
-		&& rm -rf /var/lib/apt/lists/*
-
-# Allow connection from all interfaces
-# NOTE: the effect of the line above should be equivalent to that of the line below
-#		sed -i "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-RUN		sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf \
+		&& rm -rf /var/lib/apt/lists/* \
 
 # Remove warnings
 		&& sed -i '/^\(key_buffer\)\([\w\t]*=\)/s//\1_size\2/' /etc/mysql/my.cnf \
 		&& sed -i '/^\(myisam-recover\)\([\w\t]*=\)/s//\1-options\2/' /etc/mysql/my.cnf \
 
-# Disable autostart (just to make sure)
-		&& update-rc.d -f mysql remove
+# Allow connection from all interfaces
+# NOTE: the effect of the line above should be equivalent to that of the line below
+#		sed -i "s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+		&& sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 
-# Run mysql in the foreground when a container is started without a command parameter to execute
-ENTRYPOINT	["/usr/bin/mysqld_safe"]
+ENV		PASSWORD=root \
+		USER=mysql \
+		RUNDIR=/run/mysql \
+		LOGDIR=/var/log/mysql \
+		DATADIR=/var/lib/mysql \
+		PORT=3306 \
+		INIT=0
+
+COPY		run.sh /root/run.sh
+
+ENTRYPOINT	["/root/run.sh"]
